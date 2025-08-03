@@ -14,6 +14,8 @@ float distortionBowY = 1.0;		// 1 = none. >1 bow to bottom. <1 bow to top
 
 float trapezTop = 1.0;			// trapezoid distortion factor for the top of the picture (use values < 1.0 to avoid cutting the edges)
 float trapezBottom = 1.0;		// trapezoid distortion factor for the bottom of the picture (use values < 1.0 to avoid cutting the edges)
+float trapezLeft = 1.0;         // trapezoid distortion factor for the left of the picture (use values < 1.0 to avoid cutting the edges)
+float trapezRight = 0.81;        // trapezoid distortion factor for the right of the picture (use values < 1.0 to avoid cutting the edges)
 
 float linearityCorrectionX = 1.0;	// corrects horizontal linearity for anamorphic lens
 float linearityCorrectionY = 1.0;	// corrects vertical linearity for anamorphic lens
@@ -148,7 +150,11 @@ vec4 hook()
 	float size = mix(trapezTop, trapezBottom, yZoomed);
     	float reciprocal = 1.0 / size;
     	uv.x = uv.x * reciprocal + (1.0 - reciprocal) / 2.0;
-	
+
+	float hSize = mix(trapezLeft, trapezRight, xZoomed);
+	float hRecip = 1.0 / hSize;
+	uv.y = uv.y * hRecip + (1.0 - hRecip) / 2.0;
+
 	// linearity
 	if(linearityCorrectionX != 1.0)
 	{
